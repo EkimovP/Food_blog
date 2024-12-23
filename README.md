@@ -1,7 +1,5 @@
 <h1 align="center">Веб-приложение на Django</h1>
 
-<hr>
-
 <h2 align="center">Сайт "Food Blog"</h2>
 
 <h3 align="left">Описание проекта</h3>
