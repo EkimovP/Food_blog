@@ -1,0 +1,7 @@
+<ul class="list-group">
+    {% for item in left_menu %}
+        <li class="list-group-item back-main">
+            <a href="{{ item.url }}">↩ {{ item.title }}</a>
+        </li>
+    {% endfor %}
+</ul>

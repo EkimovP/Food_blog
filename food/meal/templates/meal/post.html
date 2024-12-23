@@ -1,0 +1,56 @@
+{% extends 'meal/base.html' %}
+
+{% block leftmenu %}
+    {% if post.is_published %}
+        {% with cat_selected=post.cat.pk %}
+            {{ block.super }}
+        {% endwith %}
+    {% else %}
+        {% with cat_selected=-1 %}
+            {{ block.super }}
+        {% endwith %}
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">Главная</a>
+            </li>
+            {% if not post.is_published %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'unpublished_posts' %}">Неопубликованные записи</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{ post.cat }}
+                </li>
+            {% else %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'category' post.cat.slug %}">{{ post.cat }}</a>
+                </li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ post.title }}
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">{{ post.title }}</h1>
+
+        <div class="post-content">
+            {% if post.photo %}
+                <img class="img-article-left" src="{{ post.photo.url }}" alt="Фото {{ post.title }}">
+            {% endif %}
+            {{ post.content|linebreaks }}
+        </div>
+        {% if request.user.is_superuser or post.author == request.user %}
+        <p class="link-edit-post mt-12">
+            <a href="{% url 'edit_post' post.slug %}" class="btn btn-warning">Редактировать пост</a>
+        </p>
+        {% endif %}
+    </div>
+{% endblock %}

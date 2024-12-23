@@ -1,0 +1,97 @@
+{% extends 'meal/base.html' %}
+
+{% load meal_tags %}
+{% load cache %}
+
+{% cache 3600 page-about %}
+
+{% block leftmenu %}
+    {% left_menu %}
+{% endblock leftmenu %}
+
+{% block content %}
+    <div class="container-card">
+        <div class="card-site">
+            <div class="bd-example m-0 border-0">
+                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="100%" height="480" xmlns="http://www.w3.org/2000/svg" role="img"
+                                 aria-label="Placeholder: First slide" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#178517"/>
+                            </svg>
+                            <div class="carousel-caption">
+                                <h5>Добро пожаловать на наш сайт</h5>
+                                <p>Наш сайт — это платформа, где пользователи могут находить уникальные рецепты со всего мира и делиться своими кулинарными открытиями. Мы стремимся сделать приготовление пищи увлекательным и доступным для всех.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="480" xmlns="http://www.w3.org/2000/svg" role="img"
+                                 aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#157915"/>
+                            </svg>
+                            <div class="carousel-caption">
+                                <h5>Наша миссия</h5>
+                                <p>Наша миссия — объединить людей через кулинарию и помочь каждому находить вдохновение в обычных продуктах. Мы верим, что еда — это не только питание, но и искусство.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="480" xmlns="http://www.w3.org/2000/svg" role="img"
+                                 aria-label="Placeholder: Third slide" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#136E13"/>
+                            </svg>
+                            <div class="carousel-caption">
+                                <h5>Что вы можете найти на нашем сайте</h5>
+                                <p>- Читайте интересные статьи и советы по приготовлению блюд.</p>
+                                <p>- Исследуйте рецепты горячих, холодных и десертов.</p>
+                                <p>- Откройте для себя историю блюд и их состав.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="480" xmlns="http://www.w3.org/2000/svg" role="img"
+                                 aria-label="Placeholder: Fourth slide" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#116411"/>
+                            </svg>
+                            <div class="carousel-caption">
+                                <h5>Для кого этот сайт?</h5>
+                                <p>Сайт будет полезен всем, кто любит готовить, экспериментировать с рецептами или только начинает осваивать кухню. Мы предлагаем разнообразные рецепты для всех уровней мастерства.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="480" xmlns="http://www.w3.org/2000/svg" role="img"
+                                 aria-label="Placeholder: Fifth slide" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#0F5B0F"/>
+                            </svg>
+                            <div class="carousel-caption">
+                                <h5>История создания</h5>
+                                <p>Идея создать этот сайт возникла, когда мы столкнулись с проблемой поиска простых и оригинальных рецептов для будней. Сегодня нас поддерживает большая команда энтузиастов, и мы продолжаем расти.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% endcache %}

@@ -1,0 +1,20 @@
+{% extends 'meal/base.html' %}
+
+{% block content %}
+<div class="container unpublished-recordings">
+    <h1 class="text-center mb-4">{{title}}</h1>
+    {% if posts %}
+        <div class="list-group">
+            {% for post in posts %}
+                <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+                    <h3 class="mb-1">Название поста: {{post.title}}</h3>
+                    <small>&#129534 Категория: {{post.cat.name}}</small>
+                    <small>&#9998 Автор: {{post.author.username}}</small>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">Неопубликованных записей нет.</p>
+    {% endif %}
+</div>
+{% endblock %}

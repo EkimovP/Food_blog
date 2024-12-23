@@ -1,0 +1,39 @@
+{% extends 'meal/base.html' %}
+
+{% block content %}
+	<ul class="list-articles">
+		{% for p in posts %}
+			<li class="mb-4">
+				<div class="article-panel">
+					<p class="first">&#129534 Категория: {{p.cat}}</p>
+					<p class="last">Дата публикации: {{p.time_update|date:"d.m.Y"}}</p>
+                    <p class="last">&#9998 Автор: {{ p.author.username }}</p>
+				</div>
+
+				<div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="text-center mb-4">{{ p.title }}</h2>
+                            <div class="article-content">
+                                {% autoescape on %}
+                                    {{ p.content|linebreaks|truncatewords:50 }}
+                                {% endautoescape %}
+                            </div>
+                            <p class="link-read-post mt-3">
+                                <a href="{{ p.get_absolute_url }}" class="btn btn-info">Читать пост</a>
+                            </p>
+                        </div>
+
+                        <div class="col-md-4">
+                            {% if p.photo %}
+                                <div class="img-container">
+                                    <img class="img-fluid rounded shadow-sm" src="{{ p.photo.url }}" alt="Изображение {{ p.title }}">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

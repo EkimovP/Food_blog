@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  application:
+    container_name: ${APPLICATION_HOSTNAME:-django_web_application}
+    hostname: ${APPLICATION_HOSTNAME:-django_web_application}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:${APPLICATION_INNER_PORT:-8000}"
+    ports:
+      - ${APPLICATION_OUTER_PORT:-8000}:${APPLICATION_INNER_PORT:-8000}
+    env_file:
+      - .env
+    volumes:
+      - ./food:/application

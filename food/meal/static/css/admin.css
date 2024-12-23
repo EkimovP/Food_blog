@@ -1,0 +1,43 @@
+#header, .module caption  {
+    background: #123524;
+}
+
+.model-category a, .model-food a,.model-group a, .model-user a, div.breadcrumbs a {
+    color: #FFF0F5;
+    transition: all 0.3s linear;
+	text-decoration: none;
+}
+
+.model-category a:hover, .model-food a:hover, .model-group a:hover, .model-user a:hover, div.breadcrumbs a:hover {
+    color: #d74a49;
+	text-decoration: none;
+}
+
+a.section:hover {
+    color: #d74a49;
+    text-decoration: none;
+}
+
+div.breadcrumbs {
+  background: black;
+}
+
+#nav-sidebar .current-model {
+  background: #007D34;
+}
+
+#site-name a:link, #site-name a:visited {
+  color: #A52A2A;
+}
+
+#header {
+  color: #FF8000;
+}
+
+div.breadcrumbs {
+    color: rebeccapurple;
+}
+
+#nav-sidebar .current-app .section:link, #nav-sidebar .current-app .section:visited {
+  color: #ffffff;
+}

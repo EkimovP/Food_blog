@@ -1,0 +1,224 @@
+{% load static %}
+{% load meal_tags %}
+{% load cache %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title }}</title>
+        <link href="{% static 'meal/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'meal/css/styles.css' %}" rel="stylesheet">
+        <link rel="icon" href="{% static 'meal/images/knife.ico' %}" type="image/x-icon">
+    </head>
+    <body>
+        {% if messages %}
+            <div id="toast-container">
+                {% for message in messages %}
+                    <div class="toast toast-{{ message.tags }}" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Уведомление</strong>
+                            <button type="button" class="btn-close btn-{{ message.tags }}-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="flex-wrapper">
+            <div class="content-all">
+                {% block mainmenu %}
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <div class="container">
+                            <a class="navbar-brand" href="{% url 'home' %}">
+                                <div class="logo"></div>
+                            </a>
+
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    {% for m in menu %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url m.url_name %}">{{ m.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <ul class="navbar-nav">
+                                    {% if request.user.is_authenticated %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                {% endblock mainmenu %}
+
+                <div class="container-main mt-4">
+                    <div class="row">
+                        <aside class="col-md-3">
+                            {% block leftmenu %}
+                                <ul class="list-group">
+                                    {% if cat_selected == 0 %}
+                                        <li class="list-group-item active">
+                                            Все категории
+                                            <span class="badge bg-success ms-2">Выбрано</span>
+                                        </li>
+                                    {% else %}
+                                        <li class="list-group-item">
+                                            <a href="{% url 'home' %}">Все категории</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for c in cats %}
+                                        {% if c.food__count > 0 %}
+                                            <li class="list-group-item {% if c.pk == cat_selected %} active {% endif %}">
+                                                {% if c.pk == cat_selected %}
+                                                    {{ c.name }}
+                                                    <span class="badge bg-success ms-2">Выбрано</span>
+                                                {% else %}
+                                                    <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                                                {% endif %}
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if user.is_authenticated %}
+                                        {% if user.is_superuser %}
+                                            {% if cat_selected == -1 %}
+                                                <li class="list-group-item active">
+                                                    Все неопубликованные записи
+                                                    <span class="badge bg-success ms-2">Выбрано</span>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item">
+                                                    <a href="{% url 'unpublished_posts' %}">Все неопубликованные записи</a>
+                                                </li>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if cat_selected == -1 %}
+                                                <li class="list-group-item active">
+                                                    Мои неопубликованные записи
+                                                    <span class="badge bg-success ms-2">Выбрано</span>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item">
+                                                    <a href="{% url 'unpublished_posts' %}">Мои неопубликованные записи</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </ul>
+                            {% endblock leftmenu %}
+                        </aside>
+
+                        <main class="col-md-9">
+                            {% block breadcrumbs %}
+                            {% endblock %}
+
+                            <div class="content-content">
+                                {% block content %}
+                                {% endblock %}
+
+                                {% if page_obj.has_other_pages %}
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+
+                                            {% if page_obj.number > 3 %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=1">1</a>
+                                                </li>
+                                                {% if page_obj.number > 4 %}
+                                                    <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% for p in paginator.page_range %}
+                                                {% if p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                                                    {% if page_obj.number == p %}
+                                                        <li class="page-item active" aria-current="page">
+                                                            <span class="page-link">{{ p }}</span>
+                                                        </li>
+                                                    {% else %}
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if page_obj.number < paginator.num_pages|add:-2 %}
+                                                {% if page_obj.number < paginator.num_pages|add:-3 %}
+                                                    <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                                                {% endif %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                                                </li>
+                                            {% endif %}
+
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                {% endif %}
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+
+            {% cache 3600 footer %}
+            <footer class="bg-light text-center py-3 mt-4">
+                <div class="container-footer">
+                    <div class="row row-footer">
+                        <div class="col-md-6">
+                            <h6>Контакты</h6>
+                            <p>Email: pavel_ekimov_44@mail.ru</p>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h6>Полезные ссылки</h6>
+                            <div class="footer-links">
+                                <a href="https://github.com/EkimovP">Гитхаб создателя</a>
+                                <a href="https://ya.ru/images/search?from=tabbar&text=nature%20photos%20are%20beautiful">Для любования</a>
+                                <a href="https://tilda.cc/ru/privacy-generator/">Политика конфиденциальности</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="confidentiality">&copy; 2024. Все права защищены.</p>
+                </div>
+            </footer>
+            {% endcache %}
+        </div>
+
+        <script src="{% static 'meal/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'meal/js/app.js' %}"></script>
+    </body>
+</html>
